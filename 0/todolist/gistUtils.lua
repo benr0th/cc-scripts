@@ -32,13 +32,14 @@ local function saveGistID(gistID)
     file.close()
 end
 
-function createGistAsync(fileContent)
+-- Function to create a new Gist
+function createGist(fileContent)
     local url = "https://api.github.com/gists"
     local body = textutils.serializeJSON({
         description = "Tasks file from ComputerCraft",
         public = false,
         files = {
-            ["tasks.txt"] = { content = fileContent or "dummy" }
+            ["tasks.txt"] = { content = fileContent or "dummy" } -- Ensure content is never nil
         }
     })
     local headers = {
@@ -46,7 +47,20 @@ function createGistAsync(fileContent)
         ["Content-Type"] = "application/json"
     }
 
-    http.request(url, body, headers)
+    local response = http.post(url, body, headers)
+    if response then
+        local data = textutils.unserializeJSON(response.readAll())
+        response.close()
+
+        if data and data.id then
+            saveGistID(data.id)
+            print("Gist created successfully! Gist URL: " .. data.html_url)
+        else
+            print("Failed to create gist.")
+        end
+    else
+        print("Failed to create gist.")
+    end
 end
 
 function updateGistAsync(gistID, fileContent)

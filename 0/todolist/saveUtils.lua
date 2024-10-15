@@ -10,7 +10,7 @@ function readTasks()
         downloadTasksFromGistAsync(gistID)
     else
         print("No gist ID found, creating gist")
-        createGistAsync(file)
+        createGist(file)
         gistID = getGistID()
     end
 

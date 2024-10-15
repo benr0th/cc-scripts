@@ -1,4 +1,8 @@
-peripheral.find("modem", rednet.open)
+local modem = peripheral.find("modem", rednet.open)
+
+if not modem then
+    error("Please attach a modem first.")
+end
 
 while true do
     local senderID, message, protocol = rednet.receive("GistIDChannel")
