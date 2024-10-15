@@ -1,5 +1,5 @@
 -- File path for the tasks file
-local file_path = "tasks.txt"
+local file_path = "todolist/tasks.txt"
 
 function readTasks()
     -- Open the file in read mode

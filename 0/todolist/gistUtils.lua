@@ -8,7 +8,11 @@ else
     print(err)
 end
 
-local gistIDFile = "gist_id.txt" -- Store the ID of the Gist once created
+if GITHUB_TOKEN == "enter_token_here" then
+    error("Please add Github Token with gist permission to the .env file")
+end
+
+local gistIDFile = "todolist/gist_id.txt" -- Store the ID of the Gist once created
 local tasksFile = "tasks.txt"
 
 function getGistID()

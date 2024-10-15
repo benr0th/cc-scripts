@@ -14,7 +14,7 @@ else
     
     -- Attempt to run the installation script
     local installSuccess, installErr = pcall(function()
-        shell.run("wget run https://basalt.madefor.cc/install.lua packed basalt.lua master")
+        shell.run("wget run https://basalt.madefor.cc/install.lua packed todolist/basalt.lua master")
     end)
 
     if installSuccess then
