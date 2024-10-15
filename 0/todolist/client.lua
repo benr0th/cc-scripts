@@ -1,4 +1,5 @@
-local modem = peripheral.find("modem", rednet.open)
+peripheral.find("modem", rednet.open)
+local modem = peripheral.find("modem")
 
 if not modem then
     error("Please attach a modem first.")
@@ -18,7 +19,7 @@ end
 while true do
     local senderID, message, protocol = rednet.receive("TokenChannel")
     if protocol == "TokenChannel" then
-        if message == "Failed to get Github Token" then print(message) break end
+        if message == "Failed to get Github Token, check .env file" then print(message) break end
         local file = fs.open(".env", "w+")
         file.write(message)
         file.close()

@@ -78,7 +78,32 @@ function updateGistAsync(gistID, fileContent)
     http.request(url, body, headers)
 end
 
-function downloadTasksFromGistAsync(gistID)
+function downloadTasksFromGist(gistID)
+    local url = "https://api.github.com/gists/" .. gistID
+    local headers = {
+        ["Authorization"] = "token " .. ENV["GITHUB_TOKEN"]
+    }
+
+    local response = http.get(url, headers)
+    if response then
+        local data = textutils.unserializeJSON(response.readAll())
+        response.close()
+
+        if data and data.files and data.files["tasks.txt"] then
+            local gistContent = data.files["tasks.txt"].content
+            local file = fs.open("todolist/tasks.txt", "w")
+            file.write(gistContent)
+            file.close()
+            print("Downloaded tasks from Gist successfully!")
+        else
+            print("Failed to get tasks from Gist.")
+        end
+    else
+        print("Failed to download from Gist.")
+    end
+end
+
+local function downloadTasksFromGistAsync(gistID)
     local url = "https://api.github.com/gists/" .. gistID
     local headers = {
         ["Authorization"] = "token " .. ENV["GITHUB_TOKEN"]
@@ -129,7 +154,7 @@ function syncTasks()
     if gistID then
         updateGistAsync(gistID, fileContent)
     else
-        createGistAsync(fileContent)
+        createGist(fileContent)
     end
 end
 

@@ -1,4 +1,5 @@
-local modem = peripheral.find("modem", rednet.open)
+peripheral.find("modem", rednet.open)
+local modem = peripheral.find("modem")
 
 if not modem then
     error("Please attach a modem first.")
@@ -12,7 +13,7 @@ if gistID then
     print("Sent GistID")
 end
 
-if ENV["GITHUB_TOKEN"] ~= nil or ENV["GITHUB_TOKEN"] ~= "enter_token_here" then -- TODO: Validate token
+if ENV["GITHUB_TOKEN"] ~= nil or ENV["GITHUB_TOKEN"] ~= "enter_token_here" then -- TODO: Validate token, encrypt message
     rednet.broadcast("GITHUB_TOKEN=" .. ENV["GITHUB_TOKEN"], "TokenChannel")
     print("Sent Github Token")
 else

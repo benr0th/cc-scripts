@@ -7,7 +7,7 @@ function readTasks()
     
     local gistID = getGistID()
     if gistID then
-        downloadTasksFromGistAsync(gistID)
+        downloadTasksFromGist(gistID)
     else
         print("No gist ID found, creating gist")
         createGist(file)
@@ -17,7 +17,7 @@ function readTasks()
     -- If the file doesn't exist, return an empty tasks table
     if not file then
         print("No tasks file found, fetching.")
-        downloadTasksFromGistAsync(gistID)
+        downloadTasksFromGist(gistID)
         -- Re-open the file after creating it
         file = io.open(file_path, "r")
     end
