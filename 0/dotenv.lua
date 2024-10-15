@@ -44,7 +44,8 @@ local function parseEnv(content)
         value = value:sub(2, -2)
       end
       -- Store the key-value pair in the table
-      pairs[key] = value
+      -- pairs[key] = value
+      table.insert(pairs, {key = key, value = value})
     end
   end
   -- Return the table
@@ -65,11 +66,11 @@ function dotenv:load(filename)
   -- Parse the file content
   local pairs = parseEnv(content)
   -- Loop through the pairs
-  for key, value in pairs(pairs) do
+  for key, value in ipairs(pairs) do
     -- Check if the key is not already in the _G table
-    if not _G[key] then
+    if not _G[value.key] then
       -- Set the key-value pair in the _G table
-      _G[key] = value
+      _G[value.key] = value.value
     end
   end
   -- Return true

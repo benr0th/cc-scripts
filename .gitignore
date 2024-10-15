@@ -1,6 +1,6 @@
 tasks.txt
 gist_id.txt
-gistUtils.lua
 basalt.lua
 program.lua
 startup.lua
+.env

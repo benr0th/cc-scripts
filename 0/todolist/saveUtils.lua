@@ -1,34 +1,23 @@
 -- File path for the tasks file
 local file_path = "tasks.txt"
 
-local function createTasksFile()
-    local file = io.open(file_path, "w")
-    
-    if file then
-        -- Write an initial message or leave it empty
-        basalt.debug("Tasks file created: " .. file_path)
-    else
-        basalt.debug("Error creating tasks file.")
-    end
-end
-
 function readTasks()
     -- Open the file in read mode
     local file = io.open(file_path, "r")
     
     local gistID = getGistID()
     if gistID then
-        downloadTasksFromGist(gistID)
+        downloadTasksFromGistAsync(gistID)
     else
         print("No gist ID found, creating gist")
-        createGist(file)
+        createGistAsync(file)
         gistID = getGistID()
     end
 
     -- If the file doesn't exist, return an empty tasks table
     if not file then
         print("No tasks file found, fetching.")
-        downloadTasksFromGist(gistID)
+        downloadTasksFromGistAsync(gistID)
         -- Re-open the file after creating it
         file = io.open(file_path, "r")
     end
@@ -64,5 +53,5 @@ function writeTasks(task_table)
     
     file:close()
 
-    uploadTasks()
+    syncTasks()
 end

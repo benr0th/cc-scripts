@@ -53,7 +53,6 @@ local flex = main:addFlexbox()
     :setSize("parent.w - 2", "parent.h - 2")
     :setDirection("vertical")
 
--- Function to add a new task
 local function addTask()
     if main:getChild("inputFrame") then return end
     local inputFrame = main:addFrame("inputFrame")
@@ -86,7 +85,6 @@ local function addTask()
 
 end
 
--- Add Task button
 local addTaskButton = flex:addButton()
     :setPosition(1, 1)
     :setSize(8, 1)
@@ -95,7 +93,6 @@ local addTaskButton = flex:addButton()
     :setForeground(colors.white)
     :onClick(addTask)
 
--- Scrollable task frame
 local taskFrame = flex:addScrollableFrame()
     :setBackground(colors.black)
     :setBorder(colors.white)
@@ -107,7 +104,6 @@ local scrollBar = main:addScrollbar("scrollBar"):setPosition("parent.w", 4):setS
     taskFrame:setOffset(0, value-1)
 end)
 
--- Function to populate the task list
 makeTaskList = function()
     if tasksData == nil then return end
 
@@ -120,11 +116,11 @@ makeTaskList = function()
     for i, task in ipairs(tasksData) do
         -- Add a checkbox for each task
         taskFrame:addCheckbox()
-            :setPosition(2, i * 2)  -- Space items properly
+            :setPosition(2, i * 2)         -- Space items properly
             :onChange(function()
-                table.remove(tasksData, i)  -- Remove the task
-                writeTasks(tasksData)              -- Save the updated task list
-                makeTaskList()                     -- Refresh the list after removal
+                table.remove(tasksData, i) -- Remove the task
+                writeTasks(tasksData)      -- Save the updated task list
+                makeTaskList()             -- Refresh the list after removal
             end)
         
         -- Add a label for each task
@@ -144,7 +140,7 @@ local function restart(self, event, key)
     end
 end
 
-main:onKey(restart)
+-- main:onKey(restart)
 
 flex:onScroll(function (self, event, direction, x, y)
     local x,y = taskFrame:getOffset()
