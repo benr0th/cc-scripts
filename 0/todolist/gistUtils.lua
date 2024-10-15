@@ -1,4 +1,5 @@
 local dotenv = require("../dotenv")
+ENV = ENV or {}
 
 local success, err = dotenv:load()
 
@@ -8,12 +9,12 @@ else
     print(err)
 end
 
-if GITHUB_TOKEN == "enter_token_here" then
+if ENV["GITHUB_TOKEN"] == "enter_token_here" or ENV["GITHUB_TOKEN"] == nil or ENV["GITHUB_TOKEN"] == "" then -- TODO: validate token
     error("Please add Github Token with gist permission to the .env file")
 end
 
 local gistIDFile = "todolist/gist_id.txt" -- Store the ID of the Gist once created
-local tasksFile = "tasks.txt"
+local tasksFile = "todolist/tasks.txt"
 
 function getGistID()
     if fs.exists(gistIDFile) then
@@ -41,7 +42,7 @@ function createGistAsync(fileContent)
         }
     })
     local headers = {
-        ["Authorization"] = "token " .. GITHUB_TOKEN,
+        ["Authorization"] = "token " .. ENV["GITHUB_TOKEN"],
         ["Content-Type"] = "application/json"
     }
 
@@ -56,7 +57,7 @@ function updateGistAsync(gistID, fileContent)
         }
     })
     local headers = {
-        ["Authorization"] = "token " .. GITHUB_TOKEN,
+        ["Authorization"] = "token " .. ENV["GITHUB_TOKEN"],
         ["Content-Type"] = "application/json"
     }
 
@@ -66,7 +67,7 @@ end
 function downloadTasksFromGistAsync(gistID)
     local url = "https://api.github.com/gists/" .. gistID
     local headers = {
-        ["Authorization"] = "token " .. GITHUB_TOKEN
+        ["Authorization"] = "token " .. ENV["GITHUB_TOKEN"]
     }
 
     http.request(url, nil, headers)

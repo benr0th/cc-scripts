@@ -1,4 +1,4 @@
-local utils = require("/todolist/gistUtils")
+local gistUtils = require("/todolist/gistUtils")
 local saveUtils = require("/todolist/saveUtils")
 local basalt
 
@@ -37,7 +37,7 @@ else
     main = basalt.addFrame()
 end
 
-if main == nil then basalt.debug("Error: No frame found") shell.run("terminate") end
+if main == nil then error("No frame found") end
 
 main:setBackground(colors.black)
 

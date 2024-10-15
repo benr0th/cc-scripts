@@ -67,11 +67,7 @@ function dotenv:load(filename)
   local pairs = parseEnv(content)
   -- Loop through the pairs
   for key, value in ipairs(pairs) do
-    -- Check if the key is not already in the _G table
-    if not _G[value.key] then
-      -- Set the key-value pair in the _G table
-      _G[value.key] = value.value
-    end
+    ENV[value.key] = value.value
   end
   -- Return true
   return true
