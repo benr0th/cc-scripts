@@ -52,7 +52,7 @@ local flex = main:addFlexbox()
     :setPosition(2, 2)
     :setSize("parent.w - 2", "parent.h - 2")
     :setDirection("vertical")
-local taskInput
+
 -- Function to add a new task
 local function addTask()
     if main:getChild("inputFrame") then return end
@@ -61,14 +61,14 @@ local function addTask()
         :setSize("parent.w - 12", 1)
         :setPosition(12, 2)
 
-    taskInput = inputFrame:addInput("taskInput")
+    local taskInput = inputFrame:addInput("taskInput")
         :setInputType("text")
         :setDefaultText("Click me, F1 to cancel")
         :setInputLimit(30)
         :setBackground(colors.gray)
         :setForeground(colors.white)
-        :setSize("parent.w - 4", 1)
-        :setPosition(2, 1)
+        :setSize("parent.w", 1)
+        :setPosition(1, 1)
         :setFocus(true)
         :onKey(function (self,event,key)
             if key == keys.enter or key == keys.numPadEnter then
@@ -91,14 +91,16 @@ local addTaskButton = flex:addButton()
     :setPosition(1, 1)
     :setSize(8, 1)
     :setText("Add Task")
+    :setBackground(colors.black)
     :setForeground(colors.white)
     :onClick(addTask)
 
 -- Scrollable task frame
 local taskFrame = flex:addScrollableFrame()
-    :setBackground(colors.gray)
-    :setPosition(1, 2)  -- Adjust position to avoid overlapping with the button
-    :setSize("parent.w", "parent.h - 1")  -- Leave space for the button
+    :setBackground(colors.black)
+    :setBorder(colors.white)
+    :setPosition(1, 1)  -- Adjust position to avoid overlapping with the button
+    :setSize("parent.w", "parent.h - 2")  -- Leave space for the button
     :setDirection("vertical")
 
 local scrollBar = main:addScrollbar("scrollBar"):setPosition("parent.w", 4):setSize(1, 15):setScrollAmount(#tasksData - 2):onChange(function (self, _, value)
@@ -118,7 +120,7 @@ makeTaskList = function()
     for i, task in ipairs(tasksData) do
         -- Add a checkbox for each task
         taskFrame:addCheckbox()
-            :setPosition(1, i * 2)  -- Space items properly
+            :setPosition(2, i * 2)  -- Space items properly
             :onChange(function()
                 table.remove(tasksData, i)  -- Remove the task
                 writeTasks(tasksData)              -- Save the updated task list
@@ -129,7 +131,7 @@ makeTaskList = function()
         taskFrame:addLabel()
             :setText(task)
             :setForeground(colors.white)
-            :setPosition(3, i * 2)  -- Position next to the checkbox
+            :setPosition(4, i * 2)  -- Position next to the checkbox
     end
 end
 
@@ -142,7 +144,7 @@ local function restart(self, event, key)
     end
 end
 
--- main:onKey(restart)
+main:onKey(restart)
 
 flex:onScroll(function (self, event, direction, x, y)
     local x,y = taskFrame:getOffset()
