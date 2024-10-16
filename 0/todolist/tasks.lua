@@ -95,8 +95,8 @@ local addTaskButton = flex:addButton()
 
 local taskFrame = flex:addScrollableFrame()
     :setBackground(colors.black)
-    :setBorder(colors.white)
-    :setPosition(1, 1)  -- Adjust position to avoid overlapping with the button
+    :setBorder(colors.white, "top", "right", "left") -- TODO: fix basalt's broken border or come up with another idea
+    :setPosition(1, 1)
     :setSize("parent.w", "parent.h - 2")  -- Leave space for the button
     :setDirection("vertical")
 
