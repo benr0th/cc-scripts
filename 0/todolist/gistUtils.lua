@@ -39,7 +39,7 @@ function createGist(fileContent)
         description = "Tasks file from ComputerCraft",
         public = false,
         files = {
-            ["tasks.txt"] = { content = fileContent or "dummy" } -- Ensure content is never nil
+            ["tasks.txt"] = { content = fileContent or "1" } -- Ensure content is never nil
         }
     })
     local headers = {
@@ -67,7 +67,7 @@ function updateGistAsync(gistID, fileContent)
     local url = "https://api.github.com/gists/" .. gistID
     local body = textutils.serializeJSON({
         files = {
-            ["tasks.txt"] = { content = fileContent or "dummy" }
+            ["tasks.txt"] = { content = fileContent or "2" }
         }
     })
     local headers = {
@@ -145,7 +145,7 @@ function syncTasks()
     end
 
     -- Upload (or update) the tasks file asynchronously
-    local fileContent = "dummy"
+    local fileContent = "3"
     if fs.exists(tasksFile) then
         local file = fs.open(tasksFile, "r")
         fileContent = file.readAll()
