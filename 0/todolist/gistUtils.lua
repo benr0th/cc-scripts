@@ -129,7 +129,7 @@ local function handleHttpEvent()
             elseif data and data.id then
                 saveGistID(data.id)
                 print("Gist created/updated successfully!")
-                -- rednet.broadcast("updateList", "updateProtocol") -- use rednet.broadcast with parallelWaitForAny in client/server?
+                rednet.broadcast("updateList", "updateProtocol")
             end
         elseif event == "http_failure" then
             print("HTTP request failed: " .. url)
@@ -159,5 +159,14 @@ function syncTasks()
     end
 end
 
+local function updateTaskList()
+    while true do
+        local senderID, message, protocol = rednet.receive("updateProtocol")
+        if protocol == "updateProtocol" and message == "updateList" then
+            makeTaskList()
+        end
+    end
+end
+
 -- Main loop to handle HTTP responses
-parallel.waitForAny(syncTasks, handleHttpEvent)
+parallel.waitForAny(syncTasks, handleHttpEvent, updateTaskList)

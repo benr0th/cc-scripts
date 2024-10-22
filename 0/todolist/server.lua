@@ -21,14 +21,3 @@ else
     rednet.broadcast(msg, "TokenChannel")
     print(msg)
 end
-
--- local function updateTaskList()
---     while true do
---         local senderID, message, protocol = rednet.receive("updateProtocol")
---         if protocol == "updateProtocol" and message == "updateList" then
-            
---         end
---     end
--- end
-
--- parallel.waitForAny()
