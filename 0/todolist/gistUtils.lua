@@ -154,7 +154,6 @@ function syncTasks()
 
     if gistID then
         updateGistAsync(gistID, fileContent)
-        makeTaskList()
     else
         createGist(fileContent)
     end
