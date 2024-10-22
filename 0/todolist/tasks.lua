@@ -43,8 +43,6 @@ main:setBackground(colors.black)
 
 local tasksData = readTasks()
 
-local makeTaskList
-
 -- Main flexbox container
 local flex = main:addFlexbox()
     :setWrap("nowrap")

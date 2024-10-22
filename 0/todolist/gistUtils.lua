@@ -129,6 +129,7 @@ local function handleHttpEvent()
             elseif data and data.id then
                 saveGistID(data.id)
                 print("Gist created/updated successfully!")
+                makeTaskList()
             end
         elseif event == "http_failure" then
             print("HTTP request failed: " .. url)

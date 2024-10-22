@@ -8,6 +8,7 @@ function readTasks()
     local gistID = getGistID()
     if gistID then
         downloadTasksFromGist(gistID)
+        file = io.open(file_path, "r") -- read file after updating it
     else
         print("No gist ID found, creating gist")
         createGist(file)
