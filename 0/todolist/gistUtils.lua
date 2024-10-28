@@ -1,4 +1,6 @@
 local dotenv = require("../dotenv")
+peripheral.find("modem", rednet.open)
+local basalt = require("basalt")
 ENV = ENV or {}
 
 local success, err = dotenv:load()
@@ -72,10 +74,38 @@ function updateGistAsync(gistID, fileContent)
     })
     local headers = {
         ["Authorization"] = "token " .. ENV["GITHUB_TOKEN"],
-        ["Content-Type"] = "application/json"
+        ["Content-Type"] = "application/json",
+        ["X-HTTP-Method-Override"] = "PATCH"
     }
 
     http.request(url, body, headers)
+end
+
+function updateGist(gistID, fileContent)
+    local url = "https://api.github.com/gists/" .. gistID
+    local body = textutils.serializeJSON({
+        files = {
+            ["tasks.txt"] = { content = fileContent or {"dummy"} }
+        }
+    })
+    local headers = {
+        ["Authorization"] = "token " .. ENV["GITHUB_TOKEN"],
+        ["X-HTTP-Method-Override"] = "PATCH"
+    }
+
+    local response = http.post(url, body, headers)
+    if response then
+        local data = textutils.unserializeJSON(response.readAll())
+        response.close()
+
+        if data and data.files and data.files["tasks.txt"] then
+            print("Gist updated successfully!")
+        else
+            print("Failed to create gist.")
+        end
+    else
+        print("Failed to create gist.")
+    end
 end
 
 function downloadTasksFromGist(gistID)
@@ -91,10 +121,11 @@ function downloadTasksFromGist(gistID)
 
         if data and data.files and data.files["tasks.txt"] then
             local gistContent = data.files["tasks.txt"].content
-            local file = fs.open("todolist/tasks.txt", "w")
-            file.write(gistContent)
-            file.close()
+            -- local file = fs.open("todolist/tasks.txt", "w")
+            -- file.write(gistContent)
+            -- file.close()
             print("Downloaded tasks from Gist successfully!")
+            return gistContent
         else
             print("Failed to get tasks from Gist.")
         end
@@ -122,47 +153,50 @@ local function handleHttpEvent()
 
             if data and data.files and data.files["tasks.txt"] then
                 local gistContent = data.files["tasks.txt"].content
-                local file = fs.open(tasksFile, "w")
-                file.write(gistContent)
-                file.close()
+                -- local file = fs.open(tasksFile, "w")
+                -- file.write(gistContent)
+                -- file.close()
                 print("Tasks downloaded successfully!")
-            elseif data and data.id then
-                saveGistID(data.id)
-                print("Gist created/updated successfully!")
-                rednet.broadcast("updateList", "updateProtocol")
+                return gistContent
+            elseif data then
+                print("Gist updated successfully!")
             end
         elseif event == "http_failure" then
             print("HTTP request failed: " .. url)
         end
+
     end
 end
 
-function syncTasks()
+function syncTasks(fileContent)
     -- Asynchronously download tasks from Gist (if Gist ID exists)
     local gistID = getGistID()
-    if gistID then
-        downloadTasksFromGistAsync(gistID)
-    end
+    -- if gistID then
+    --     downloadTasksFromGist(gistID)
+    -- end
 
     -- Upload (or update) the tasks file asynchronously
-    local fileContent = "3"
-    if fs.exists(tasksFile) then
-        local file = fs.open(tasksFile, "r")
-        fileContent = file.readAll()
-        file.close()
-    end
+    -- local fileContent = "3"
+    -- if fs.exists(tasksFile) then
+    --     local file = fs.open(tasksFile, "r")
+    --     fileContent = file.readAll()
+    --     file.close()
+    -- end
 
     if gistID then
-        updateGistAsync(gistID, fileContent)
+        updateGist(gistID, fileContent)
+        -- basalt.debug("sent update")
+        rednet.broadcast("updateList", "updateProtocol")
     else
         createGist(fileContent)
     end
 end
 
 local function updateTaskList()
+    basalt.debug("update?")
     while true do
         local senderID, message, protocol = rednet.receive("updateProtocol")
-        if protocol == "updateProtocol" and message == "updateList" then
+        if protocol == "updateProtocol" then
             makeTaskList()
         end
     end
