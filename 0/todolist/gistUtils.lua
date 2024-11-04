@@ -1,6 +1,6 @@
 local dotenv = require("../dotenv")
-peripheral.find("modem", rednet.open)
-local basalt = require("basalt")
+-- peripheral.find("modem", rednet.open)
+-- local basalt = require("basalt")
 ENV = ENV or {}
 
 local success, err = dotenv:load()
@@ -186,14 +186,14 @@ function syncTasks(fileContent)
     if gistID then
         updateGist(gistID, fileContent)
         -- basalt.debug("sent update")
-        rednet.broadcast("updateList", "updateProtocol")
+        -- rednet.broadcast("updateList", "updateProtocol")
     else
         createGist(fileContent)
     end
 end
 
 local function updateTaskList()
-    basalt.debug("update?")
+    -- basalt.debug("update?")
     while true do
         local senderID, message, protocol = rednet.receive("updateProtocol")
         if protocol == "updateProtocol" then
@@ -203,4 +203,4 @@ local function updateTaskList()
 end
 
 -- Main loop to handle HTTP responses
-parallel.waitForAny(syncTasks, handleHttpEvent, updateTaskList)
+parallel.waitForAny(syncTasks, handleHttpEvent)

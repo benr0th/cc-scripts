@@ -8,7 +8,7 @@ function readTasks()
     local gistID = getGistID()
     if gistID then
         tasks = textutils.unserialise(downloadTasksFromGist(gistID))
-        -- file = io.open(file_path, "r") -- TODO: check order, make sure this is working as intended
+        -- file = io.open(file_path, "r")
     else
         print("No gist ID found, creating gist")
         createGist(file)
