@@ -41,7 +41,7 @@ function createGist()
         description = "Tasks file from ComputerCraft",
         public = false,
         files = {
-            ["tasks.txt"] = { content = '{""}' } -- Ensure content is never nil
+            ["tasks.txt"] = { content = "{}" } -- Ensure content is never nil
         }
     })
     local headers = {
@@ -70,7 +70,7 @@ function updateGistAsync(gistID, fileContent)
     local url = "https://api.github.com/gists/" .. gistID
     local body = textutils.serializeJSON({
         files = {
-            ["tasks.txt"] = { content = fileContent or {""} }
+            ["tasks.txt"] = { content = fileContent or "{}" }
         }
     })
     local headers = {
@@ -86,7 +86,7 @@ function updateGist(gistID, fileContent)
     local url = "https://api.github.com/gists/" .. gistID
     local body = textutils.serializeJSON({
         files = {
-            ["tasks.txt"] = { content = fileContent or {""} }
+            ["tasks.txt"] = { content = fileContent or "{}" }
         }
     })
     local headers = {
