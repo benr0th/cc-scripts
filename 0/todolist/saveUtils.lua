@@ -52,5 +52,5 @@ function writeTasks(task_table)
     
     -- file:close()
 
-    syncTasks(textutils.serialise(task_table))
+    syncTasks(textutils.serialise(task_table), true)
 end

@@ -35,13 +35,13 @@ local function saveGistID(gistID)
 end
 
 -- Function to create a new Gist
-function createGist()
+function createGist(fileContent)
     local url = "https://api.github.com/gists"
     local body = textutils.serializeJSON({
         description = "Tasks file from ComputerCraft",
         public = false,
         files = {
-            ["tasks.txt"] = { content = "{}" } -- Ensure content is never nil
+            ["tasks.txt"] = { content = fileContent or "{}" } -- Ensure content is never nil
         }
     })
     local headers = {
@@ -169,7 +169,7 @@ local function handleHttpEvent()
     end
 end
 
-function syncTasks(fileContent)
+function syncTasks(fileContent, shouldSync)
     -- Asynchronously download tasks from Gist (if Gist ID exists)
     local gistID = getGistID()
     -- if gistID then
@@ -185,9 +185,11 @@ function syncTasks(fileContent)
     -- end
 
     if gistID then
-        updateGist(gistID, fileContent)
-        -- basalt.debug("sent update")
-        -- rednet.broadcast("updateList", "updateProtocol")
+        if shouldSync then
+            updateGist(gistID, fileContent)
+            -- basalt.debug("sent update")
+            -- rednet.broadcast("updateList", "updateProtocol")
+        end
     else
         createGist(fileContent)
     end
