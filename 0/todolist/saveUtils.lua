@@ -11,7 +11,7 @@ function readTasks()
         -- file = io.open(file_path, "r")
     else
         print("No gist ID found, creating gist")
-        createGist(file)
+        createGist()
         gistID = getGistID()
     end
 

@@ -35,13 +35,13 @@ local function saveGistID(gistID)
 end
 
 -- Function to create a new Gist
-function createGist(fileContent)
+function createGist()
     local url = "https://api.github.com/gists"
     local body = textutils.serializeJSON({
         description = "Tasks file from ComputerCraft",
         public = false,
         files = {
-            ["tasks.txt"] = { content = fileContent or {""} } -- Ensure content is never nil
+            ["tasks.txt"] = { content = {""} } -- Ensure content is never nil
         }
     })
     local headers = {
