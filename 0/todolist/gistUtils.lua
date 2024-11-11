@@ -61,8 +61,9 @@ function createGist()
             print("Failed to create gist.")
         end
     else
-        print("Failed to create gist.")
+        error("Failed to create gist.")
     end
+
 end
 
 function updateGistAsync(gistID, fileContent)
