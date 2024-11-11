@@ -41,7 +41,7 @@ function createGist()
         description = "Tasks file from ComputerCraft",
         public = false,
         files = {
-            ["tasks.txt"] = { content = {""} } -- Ensure content is never nil
+            ["tasks.txt"] = { content = {"dummy"} } -- Ensure content is never nil
         }
     })
     local headers = {
