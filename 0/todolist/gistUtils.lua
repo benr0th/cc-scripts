@@ -186,7 +186,7 @@ function syncTasks(fileContent, shouldSync)
 
     if gistID then
         if shouldSync then
-            updateGist(gistID, fileContent)
+            updateGistAsync(gistID, fileContent)
             -- basalt.debug("sent update")
             -- rednet.broadcast("updateList", "updateProtocol")
         end
