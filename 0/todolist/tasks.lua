@@ -31,8 +31,8 @@ local mon = peripheral.find("monitor")
 
 -- Check for monitor
 if mon then
-    main = basalt.addMonitor()
-        :setMonitor(mon)
+    main = basalt.createFrame()
+        :setTerm(monitor)
 else
     main = basalt.addFrame()
 end
