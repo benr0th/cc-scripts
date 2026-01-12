@@ -14,7 +14,7 @@ else
     
     -- Attempt to run the installation script
     local installSuccess, installErr = pcall(function()
-        shell.run("wget run https://raw.githubusercontent.com/Pyroxenium/Basalt2/main/install.lua -f todolist/basalt.lua")
+        shell.run("wget run https://raw.githubusercontent.com/Pyroxenium/Basalt/refs/heads/master/docs/install.lua packed todolist/basalt.lua master")
     end)
 
     if installSuccess then
@@ -31,8 +31,8 @@ local mon = peripheral.find("monitor")
 
 -- Check for monitor
 if mon then
-    main = basalt.createFrame()
-        :setTerm(monitor)
+    main = basalt.addMonitor()
+        :setMonitor(mon)
 else
     main = basalt.addFrame()
 end
